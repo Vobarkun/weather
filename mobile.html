@@ -234,14 +234,14 @@
                 l: 75,
             },
             font: {
-                size: 15,
+                size: 22,
             },
             yaxis: {
                 tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: ' ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
                 title: {
-                    text: times[0].toLocaleDateString("de-de", { weekday: "short" }) + "  " + times[0].toLocaleDateString("de-de", { month: "short", day: "numeric" }),
+                    text: times[0].toLocaleDateString("de-de", { weekday: "short" }) + "  " + times[0].toLocaleDateString("de-de", { month: "numeric", day: "numeric" }),
                     font: {
-                        size: 24
+                        size: 26
                     },
                 }
             },
