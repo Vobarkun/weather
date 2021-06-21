@@ -183,7 +183,7 @@
             y: heights.slice(1, -1),
             type: 'scatter',
             text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
-            textfont: { color: "red", size: 20 },
+            textfont: { color: "red", size: 23 },
             textposition: 'top',
         }
         var dew = {
@@ -265,7 +265,7 @@
                 type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
             }]),
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
-                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.12 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval, sizey: 50, source: icons[x[0].icon], layer: "above"
+                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.12 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 50, source: icons[x[0].icon], layer: "above"
             })).slice(1, -1)
         }
 
