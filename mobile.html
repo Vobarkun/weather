@@ -152,8 +152,7 @@
         times = weather.map(w => new Date(w.timestamp));
         temperatures = weather.map(w => w.temperature);
         heights = movingMax(weather.map(w => w.temperature), 1, 1)
-        heights2 = movingMax(weather.map(w => w.temperature), 2, 2)
-        depths = movingMin(weather.map(w => w.temperature - 0.1), 1, 1)
+        heights = heights.map((h,i) => 0.3 * temperatures[i] + 0.7 * h)
 
         ticktimes = times.filter(x => x.getHours() % 3 == 0);
 
