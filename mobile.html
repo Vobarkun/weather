@@ -124,7 +124,7 @@
 
 
     function weatherPlot(id, weather, ymin, ymax) {
-        iconinterval = 2//(window.innerWidth > 2000 ? 2 : 3)
+        iconinterval = 1//(window.innerWidth > 2000 ? 2 : 3)
 
         weather = weather.map(function (w, i) {
             if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
@@ -225,7 +225,7 @@
 
         var layout = {
             showlegend: false,
-            height: 100,
+            height: 200,
             margin: {
                 t: 5,
                 b: 5,
@@ -258,7 +258,7 @@
                 type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
             }]),
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
-                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.12 * (ymax - ymin), sizex: 60 * 60 * 1000 * 2, sizey: 50, source: icons[x[0].icon], layer: "above"
+                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.12 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval, sizey: 50, source: icons[x[0].icon], layer: "above"
             })).slice(1, -1)
         }
 
