@@ -201,7 +201,7 @@
         var prec = {
             name: "Precipitation",
             x: times,
-            y: weather.map(w => w.precipitation - 0.07),
+            y: weather.map(w => w.precipitation),
             type: 'scatter',
             fill: 'tozeroy',
             yaxis: 'y2',
@@ -226,7 +226,7 @@
 
         var layout = {
             showlegend: false,
-            height: 195,
+            height: 190,
             margin: {
                 t: 5,
                 b: 5,
