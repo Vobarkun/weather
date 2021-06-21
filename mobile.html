@@ -124,7 +124,7 @@
 
 
     function weatherPlot(id, weather, ymin, ymax) {
-        iconinterval = 1//(window.innerWidth > 2000 ? 2 : 3)
+        iconinterval = 2//(window.innerWidth > 2000 ? 2 : 3)
 
         weather = weather.map(function (w, i) {
             if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
@@ -235,7 +235,7 @@
             yaxis: {
                 tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: ' ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
                 title: {
-                    text: new Date(Date.now()).toLocaleDateString("de-de", { month: "short", day: "numeric" })
+                    text: times[0].toLocaleDateString("de-de", { month: "short", day: "numeric" })
                 }
             },
             yaxis2: {
@@ -305,8 +305,8 @@
         ymin = Math.min(...weather.map(w => w.dew_point))
         ymax = Math.max(...weather.map(w => w.temperature)) + 15
 
-        for (i = 0; i < future + past - 1; i++) {
-            weatherPlot("div" + (i + 1), weather.slice(24 * i, 24 * i + 25))
+        for (i = 0; i < (future + past) / 2; i++) {
+            weatherPlot("div" + (i + 1), weather.slice(48 * i, 48 * i + 49))
         }
 
         // Plotly.newPlot('div1', traces, layout, { displayModeBar: false });
