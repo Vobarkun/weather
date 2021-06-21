@@ -182,7 +182,7 @@
             y: heights.slice(1, -1),
             type: 'scatter',
             text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
-            textfont: { color: "red", size: 10 },
+            textfont: { color: "red", size: 20 },
             textposition: 'top',
         }
         var dew = {
@@ -230,12 +230,18 @@
                 t: 5,
                 b: 5,
                 r: 10,
-                l: 45,
+                l: 75,
+            },
+            font: {
+                size: 15,
             },
             yaxis: {
                 tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: ' ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
                 title: {
-                    text: times[0].toLocaleDateString("de-de", { month: "short", day: "numeric" })
+                    text: times[0].toLocaleDateString("de-de", { month: "short", day: "numeric" }),
+                    font: {
+                        size: 24
+                    },
                 }
             },
             yaxis2: {
@@ -305,7 +311,7 @@
         ymin = Math.min(...weather.map(w => w.dew_point))
         ymax = Math.max(...weather.map(w => w.temperature)) + 15
 
-        for (i = 0; i < (future + past) / 2; i++) {
+        for (i = 0; i < future + past - 1; i++) {
             weatherPlot("div" + (i + 1), weather.slice(24 * i, 24 * i + 25))
         }
 
