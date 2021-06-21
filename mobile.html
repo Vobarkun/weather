@@ -124,7 +124,7 @@
 
 
     function weatherPlot(id, weather, ymin, ymax) {
-        iconinterval = 2//(window.innerWidth > 2000 ? 2 : 3)
+        iconinterval = 1//(window.innerWidth > 2000 ? 2 : 3)
 
         weather = weather.map(function (w, i) {
             if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
@@ -306,7 +306,7 @@
         ymax = Math.max(...weather.map(w => w.temperature)) + 15
 
         for (i = 0; i < (future + past) / 2; i++) {
-            weatherPlot("div" + (i + 1), weather.slice(48 * i, 48 * i + 49))
+            weatherPlot("div" + (i + 1), weather.slice(24 * i, 24 * i + 25))
         }
 
         // Plotly.newPlot('div1', traces, layout, { displayModeBar: false });
