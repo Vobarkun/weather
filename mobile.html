@@ -315,7 +315,10 @@
         ymax += 0.55 * (ymax - ymin)
 
         for (i = 0; i < future + past - 1; i++) {
-            weatherPlot("div" + (i + 1), weather.slice(24 * i, 24 * i + 25), ymin, ymax)
+            s = weather.slice(24 * i, 24 * i + 25)
+            if (s.length > 12) {
+                weatherPlot("div" + (i + 1), weather.slice(24 * i, 24 * i + 25), ymin, ymax)
+            }
         }
 
     }
