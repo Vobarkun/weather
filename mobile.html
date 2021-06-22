@@ -14,16 +14,8 @@
             filter: drop-shadow(1px 1px 2px #ccc);
         }
 
-        .legend * {
-            pointer-events: none;
-        }
-
         * {
             cursor: auto !important
-        }
-
-        body {
-            overflow: visible;
         }
     </style>
 </head>
@@ -44,7 +36,6 @@
     <div id='div13'> </div>
     <div id='div14'> </div>
     <div id='div15'> </div>
-    test
 </body>
 <script>
     const icons = {
@@ -279,7 +270,7 @@
             })).slice(1, -1)
         }
 
-        Plotly.newPlot(id, [dew, sun, prec, temp, tempT], layout, { displayModeBar: false });
+        Plotly.newPlot(id, [dew, sun, prec, temp, tempT], layout, { displayModeBar: false, staticPlot: true });
     }
 
     async function plotWeather() {
