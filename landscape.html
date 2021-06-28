@@ -1,0 +1,394 @@
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src='https://cdn.plot.ly/plotly-2.0.0.min.js'></script>
+    <title>Wetter</title>
+    <link rel="icon" type="image/png"
+        href="data:image/svg+xml,%3Csvg id='weather-icon-clear' class='weather-icon weather-icon-black clear' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%23F4A71D;%7D%3C/style%3E%3Cg id='clear'%3E%3Cpath class='st0' d='M32.9 19.2c-.7 0-1.3-.6-1.3-1.3v-4.6c0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3v4.6c0 .7-.6 1.3-1.3 1.3zM32.9 53.8c-.7 0-1.3-.6-1.3-1.3v-4.6c0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3v4.6c0 .7-.6 1.3-1.3 1.3zM17.9 34.2h-4.6c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h4.6c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM52.5 34.2h-4.6c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h4.6c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM44 23.5c-.3 0-.7-.1-.9-.4-.5-.5-.5-1.4 0-1.9l3.2-3.2c.5-.5 1.4-.5 1.9 0s.5 1.4 0 1.9L45 23.1c-.3.3-.7.4-1 .4zM19.1 48.4c-.3 0-.7-.1-.9-.4-.5-.5-.5-1.4 0-1.9l3.2-3.2c.5-.5 1.4-.5 1.9 0s.5 1.4 0 1.9L20 48c-.2.3-.6.4-.9.4zM47.2 48.2c-.3 0-.7-.1-.9-.4l-3.2-3.2c-.5-.5-.5-1.4 0-1.9s1.4-.5 1.9 0l3.2 3.2c.5.5.5 1.4 0 1.9-.3.3-.6.4-1 .4zM22.3 23.7c-.3 0-.7-.1-.9-.4l-3.2-3.2c-.5-.5-.5-1.4 0-1.9s1.4-.5 1.9 0l3.2 3.2c.5.5.5 1.4 0 1.9-.3.3-.6.4-1 .4zM32.9 24.5c4.6 0 8.4 3.8 8.4 8.4 0 4.6-3.8 8.4-8.4 8.4-4.6 0-8.4-3.8-8.4-8.4 0-4.6 3.8-8.4 8.4-8.4m0-2.7c-6.1 0-11.1 5-11.1 11.1S26.8 44 32.9 44 44 39 44 32.9s-5-11.1-11.1-11.1z'/%3E%3C/g%3E%3C/svg%3E" />
+    <style>
+        .imagelayer>image {
+            filter: saturate(3) drop-shadow(1px 1px 2px #ccc);
+        }
+
+        .textpoint {
+            filter: drop-shadow(1px 1px 2px #ccc);
+        }
+
+        .legend * {
+            pointer-events: none;
+        }
+
+        * {
+            cursor: auto !important
+        }
+    </style>
+</head>
+
+<body>
+    <div id='div1'> </div>
+    <div id='div2'> </div>
+    <div id='div3'> </div>
+</body>
+<script>
+    const icons = {
+        "cloudy": "data:image/svg+xml,%3Csvg id='weather-icon-cloudy' class='weather-icon weather-icon-black cloudy' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M49.7 50.2H16.8c-5.6 0-10.2-4.6-10.2-10.2 0-4.4 2.9-8.3 7-9.7V30c0-5.1 4.2-9.3 9.3-9.3 1.3 0 2.5.3 3.7.8 2.5-3.7 6.6-6 11.2-6 7.4 0 13.4 6 13.4 13.4 0 .8-.1 1.6-.2 2.4 4.7.6 8.3 4.6 8.3 9.4-.1 5.2-4.4 9.5-9.6 9.5zM22.9 23.4c-3.6 0-6.6 3-6.6 6.6 0 .3 0 .7.1 1.1l.2 1.3-1.3.2c-3.5.7-6.1 3.8-6.1 7.4 0 4.2 3.4 7.5 7.5 7.5h32.9c3.8 0 6.8-3.1 6.8-6.8 0-3.8-3.1-6.8-6.8-6.8h-.3l-2 .1.6-1.9c.3-1.1.5-2.2.5-3.3 0-5.9-4.8-10.7-10.7-10.7-4 0-7.6 2.2-9.5 5.7l-.7 1.3-1.2-.7c-1-.7-2.2-1-3.4-1z'/%3E%3C/svg%3E",
+        "clear-night": "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='Layer_4' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 64 64' style='enable-background:new 0 0 64 64;' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2372B8D4;%7D%0A%3C/style%3E%3Cpath class='st0' d='M50.5,35.1C39,35.1,26.3,26,32.1,11.2l0,0c-12.4-0.1-20.9,10-20.9,20.8c0,11.5,9.3,20.9,20.9,20.9 c10.5,0,19.2-7.6,20.7-17.7C52.8,35.1,51.3,35.1,50.5,35.1z M32.4,49.8c-9.9,0-17.9-8-17.9-17.9c0-8.2,5.8-15.1,13.3-17.3l0,0.1 c-1.8,12.5,7.1,23,20.7,24.2l0,0C45,45.7,40.2,49.5,32.4,49.8z'/%3E%3C/svg%3E%0A",
+        "clear-day": "data:image/svg+xml,%3Csvg id='weather-icon-clear' class='weather-icon weather-icon-black clear' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%23F4A71D;%7D%3C/style%3E%3Cg id='clear'%3E%3Cpath class='st0' d='M32.9 19.2c-.7 0-1.3-.6-1.3-1.3v-4.6c0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3v4.6c0 .7-.6 1.3-1.3 1.3zM32.9 53.8c-.7 0-1.3-.6-1.3-1.3v-4.6c0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3v4.6c0 .7-.6 1.3-1.3 1.3zM17.9 34.2h-4.6c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h4.6c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM52.5 34.2h-4.6c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h4.6c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM44 23.5c-.3 0-.7-.1-.9-.4-.5-.5-.5-1.4 0-1.9l3.2-3.2c.5-.5 1.4-.5 1.9 0s.5 1.4 0 1.9L45 23.1c-.3.3-.7.4-1 .4zM19.1 48.4c-.3 0-.7-.1-.9-.4-.5-.5-.5-1.4 0-1.9l3.2-3.2c.5-.5 1.4-.5 1.9 0s.5 1.4 0 1.9L20 48c-.2.3-.6.4-.9.4zM47.2 48.2c-.3 0-.7-.1-.9-.4l-3.2-3.2c-.5-.5-.5-1.4 0-1.9s1.4-.5 1.9 0l3.2 3.2c.5.5.5 1.4 0 1.9-.3.3-.6.4-1 .4zM22.3 23.7c-.3 0-.7-.1-.9-.4l-3.2-3.2c-.5-.5-.5-1.4 0-1.9s1.4-.5 1.9 0l3.2 3.2c.5.5.5 1.4 0 1.9-.3.3-.6.4-1 .4zM32.9 24.5c4.6 0 8.4 3.8 8.4 8.4 0 4.6-3.8 8.4-8.4 8.4-4.6 0-8.4-3.8-8.4-8.4 0-4.6 3.8-8.4 8.4-8.4m0-2.7c-6.1 0-11.1 5-11.1 11.1S26.8 44 32.9 44 44 39 44 32.9s-5-11.1-11.1-11.1z'/%3E%3C/g%3E%3C/svg%3E",
+        "fog": "data:image/svg+xml,%3Csvg id='weather-icon-fog' class='weather-icon weather-icon-black fog' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M41.7 38.5c-3.2 0-6.1-.9-8.7-2.7-7.2-5.1-13.2-5.3-19.6-.9-.5.3-1.1.2-1.4-.3-.3-.5-.2-1.1.3-1.4 7.1-4.9 14.1-4.6 21.9.9 6.2 4.4 13.3 1.9 18.2-1 .5-.3 1.1-.1 1.4.4.3.5.1 1.1-.4 1.4-4 2.4-8 3.6-11.7 3.6z'/%3E%3Cpath d='M41.7 46.3c-3.2 0-6.1-.9-8.7-2.7-7.2-5.1-13.2-5.3-19.6-.9-.5.3-1.1.2-1.4-.3-.3-.5-.2-1.1.3-1.4 7.1-4.9 14.1-4.6 21.9.9 6.2 4.3 13.3 1.9 18.2-1 .5-.3 1.1-.1 1.4.4.3.5.1 1.1-.4 1.4-4 2.4-8 3.6-11.7 3.6zM41.7 30.8c-3.2 0-6.1-.9-8.7-2.7-7.2-5.1-13.2-5.3-19.6-.9-.5.3-1.1.2-1.4-.3-.3-.5-.2-1.1.3-1.4 7.1-4.9 14.1-4.6 21.9.9 6.2 4.4 13.3 1.9 18.2-1 .5-.3 1.1-.1 1.4.4.3.5.1 1.1-.4 1.4-4 2.4-8 3.6-11.7 3.6z'/%3E%3C/svg%3E",
+        "hail": "data:image/svg+xml,%3Csvg id='weather-icon-flurries' class='weather-icon weather-icon-black flurries' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%2372B8D4;%7D%3C/style%3E%3Cpath class='st0' d='M39.2 41c.7-.9.5-2.2-.4-2.9-.9-.7-2.2-.5-2.9.4-.7.9-.5 2.2.4 2.9.9.7 2.2.5 2.9-.4z'/%3E%3Cellipse transform='rotate(-52.533 28.135 39.777)' class='st0' cx='28.1' cy='39.8' rx='2.1' ry='2.1'/%3E%3Cpath class='st0' d='M39.2 58.1c.7-.9.5-2.2-.4-2.9-.9-.7-2.2-.5-2.9.4-.7.9-.5 2.2.4 2.9.9.7 2.2.6 2.9-.4z'/%3E%3Cellipse transform='rotate(-52.533 28.134 56.89)' class='st0' cx='28.1' cy='56.9' rx='2.1' ry='2.1'/%3E%3Cellipse transform='rotate(-52.57 32.522 48.335)' class='st0' cx='32.5' cy='48.3' rx='2.1' ry='2.1'/%3E%3Cpath class='st0' d='M23.4 49.6c.7-.9.5-2.2-.4-2.9-.9-.7-2.2-.5-2.9.4-.7.9-.5 2.2.4 2.9.9.7 2.2.5 2.9-.4zM44.9 49.6c.7-.9.5-2.2-.4-2.9-.9-.7-2.2-.5-2.9.4-.6.9-.5 2.2.4 2.9.9.7 2.2.5 2.9-.4z'/%3E%3Cpath d='M50.9 22.3c.2-.8.2-1.6.2-2.4 0-7.4-6-13.4-13.4-13.4-4.5 0-8.7 2.3-11.2 6-1.2-.5-2.4-.8-3.6-.8-5.1 0-9.3 4.2-9.3 9.3v.3c-4.1 1.4-7 5.3-7 9.7 0 5.6 4.6 10.2 10.2 10.2h5c1.6 0 1.5-2.7 0-2.7h-5c-4.2 0-7.5-3.4-7.5-7.5 0-3.6 2.5-6.7 6-7.4l1.3-.2-.2-1.3c-.1-.4-.1-.7-.1-1.1 0-3.6 3-6.6 6.6-6.6 1.2 0 2.4.3 3.5 1l1.2.7.7-1.3c1.9-3.5 5.5-5.7 9.5-5.7 5.9 0 10.7 4.8 10.7 10.7 0 1.1-.2 2.2-.5 3.3l-.6 1.9 2.1-.1h.3c3.8 0 6.8 3.1 6.8 6.8 0 3.8-3.1 6.8-6.8 6.8h-5.7c-1.7 0-2 2.7 0 2.7h5.7c5.2 0 9.5-4.3 9.5-9.5-.1-4.8-3.8-8.8-8.4-9.4z'/%3E%3C/svg%3E",
+        "partly-cloudy-day": "data:image/svg+xml,%3Csvg id='weather-icon-partlycloudy' class='weather-icon weather-icon-black partlycloudy' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%23F4A71D;%7D%3C/style%3E%3Cpath class='st0' d='M35.5 15.3c-.7 0-1.3-.6-1.3-1.3V9c0-.7.6-1.3 1.3-1.3.7 0 1.3.6 1.3 1.3v5c0 .7-.6 1.3-1.3 1.3zM19.2 31.6h-5c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h5c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM56.7 31.6h-5c-.7 0-1.3-.6-1.3-1.3 0-.7.6-1.3 1.3-1.3h5c.7 0 1.3.6 1.3 1.3 0 .7-.6 1.3-1.3 1.3zM47.5 20c-.3 0-.7-.1-.9-.4-.5-.5-.5-1.4 0-1.9l3.5-3.5c.5-.5 1.4-.5 1.9 0s.5 1.4 0 1.9l-3.5 3.5c-.3.2-.7.4-1 .4zM51 46.8c-.3 0-.7-.1-.9-.4l-3.5-3.5c-.5-.5-.5-1.4 0-1.9s1.3-.5 1.9 0l3.5 3.5c.5.5.5 1.4 0 1.9-.3.2-.7.4-1 .4zM24 20.2c-.3 0-.7-.1-.9-.4l-3.5-3.5c-.5-.5-.5-1.4 0-1.9s1.3-.5 1.9 0l3.5 3.5c.5.5.5 1.4 0 1.9-.3.3-.7.4-1 .4z'/%3E%3Cpath d='M33.4 58.2h-20c-3.7 0-6.7-3-6.7-6.7 0-2.8 1.7-5.3 4.3-6.3.1-3.3 2.8-6 6.2-6 .7 0 1.4.1 2 .4 1.6-2.2 4.2-3.6 7-3.6 4.8 0 8.7 3.9 8.7 8.7 0 .4 0 .7-.1 1.1 2.8.6 5 3.1 5 6.2-.1 3.4-2.9 6.2-6.4 6.2zM17.1 41.9c-1.9 0-3.5 1.6-3.5 3.5 0 .2 0 .4.1.6l.2 1.3-1.3.3c-1.9.4-3.3 2.1-3.3 4 0 2.2 1.8 4.1 4.1 4.1h20c2 0 3.6-1.6 3.6-3.6s-1.6-3.6-3.6-3.6h-.2l-2 .1.6-1.9c.2-.6.3-1.2.3-1.9 0-3.3-2.7-6-6-6-2.2 0-4.3 1.2-5.3 3.2l-.7 1.3-1.2-.7c-.5-.5-1.2-.7-1.8-.7z'/%3E%3Cpath class='st0' d='M47.5 30.3c0-6.6-5.4-12-12-12s-12 5.4-12 12c0 .7.1 1.4.2 2 0 .8.7 1.4 1.4 1.3.4 0 1-.3 1.1-.7.2-.5.1-1 0-1.5-.1-.4-.1-.8-.1-1.1 0-5.2 4.2-9.4 9.4-9.4s9.3 4.2 9.3 9.4c0 .4-.1.8-.1 1.2-.1.4-.1.8-.2 1.2-.2.7-.5 1.5-.8 2.1-.4.7-.8 1.3-1.3 1.9-.5.6-1.1 1.1-1.7 1.4-.7.4-1.4.7-2.1 1-.3.1-.6.1-.9.3-.3.1-.5.4-.6.7-.1.2-.1.3-.1.5 0 .7.6 1.3 1.4 1.4 5.1-1.1 9.1-6.1 9.1-11.7z'/%3E%3C/svg%3E",
+        "partly-cloudy-night": "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3E%3Csvg version='1.1' id='weather-icon-mostlysunny' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 64 64' style='enable-background:new 0 0 64 64;' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%2372B8D4;%7D%0A%3C/style%3E%3Cpath d='M40.2,58.2H15.1c-4.6,0-8.4-3.8-8.4-8.4c0-3.5,2.1-6.7,5.4-7.9c0.1-4.1,3.5-7.5,7.8-7.5c0.9,0,1.8,0.1,2.5,0.5 c2-2.8,5.3-4.5,8.8-4.5c6,0,10.9,4.9,10.9,10.9c0,0.5,0,0.9-0.1,1.4c3.5,0.8,6.3,3.9,6.3,7.8C48.1,54.7,44.6,58.2,40.2,58.2z M19.8,37.7c-2.4,0-4.4,2-4.4,4.4c0,0.3,0,0.5,0.1,0.8l0.3,1.6l-1.6,0.4c-2.4,0.5-4.1,2.6-4.1,5c0,2.8,2.3,5.1,5.1,5.1h25.1 c2.5,0,4.5-2,4.5-4.5s-2-4.5-4.5-4.5H40l-2.5,0.1l0.8-2.4c0.3-0.8,0.4-1.5,0.4-2.4c0-4.1-3.4-7.5-7.5-7.5c-2.8,0-5.4,1.5-6.7,4 l-0.9,1.6L22,38.6C21.4,38,20.5,37.7,19.8,37.7z'/%3E%3Cpath class='st0' d='M58.1,24.7c0,0-1.1,0-1.6,0c-5,0-9.8-2.3-12.3-5.9c-2.1-3.1-2.4-7.4-0.9-11.4l0,0l-0.3,0 c-4.1,0-8.1,1.5-10.9,4.4c-2.9,2.9-4.6,6.9-4.6,11.1c0,1.3,0.2,2.7,0.5,4l0.1,0.4l0.4-0.1c0.7-0.2,1.5-0.3,2.3-0.4l0.5,0l-0.1-0.4 c-0.3-1.1-0.5-2.3-0.5-3.4c0-5.3,3.6-10.2,8.8-12c-0.5,4.1,0.6,8,3.1,11.1c2.7,3.5,6.9,5.7,11.7,6.2c-2.2,4.2-5,6.4-9,7.1l-0.4,0.1 l0.2,0.4c0.3,0.7,0.5,1.4,0.6,2.1l0.1,0.4l0.4-0.1c6.5-1.3,11.5-6.4,12.4-12.9l0.1-0.4L58.1,24.7z'/%3E%3C/svg%3E%0A",
+        "rain": "data:image/svg+xml,%3Csvg id='weather-icon-rain' class='weather-icon weather-icon-black rain' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%232885C7;%7D%3C/style%3E%3Cpath class='st0' d='M25.5 59.3c-.2 0-.3 0-.5-.1-.7-.3-1-1.1-.7-1.7l9.3-21.9c.3-.7 1.1-1 1.7-.7.7.3 1 1.1.7 1.7l-9.3 21.9c-.2.5-.7.8-1.2.8zM34 53.5c-.2 0-.3 0-.5-.1-.7-.3-1-1.1-.7-1.7l6.6-16c.3-.7 1.1-1 1.7-.7.7.3 1 1.1.7 1.7l-6.6 16c-.2.5-.7.8-1.2.8zM21.9 53.5c-.2 0-.3 0-.5-.1-.7-.3-1-1.1-.7-1.7l6.6-16c.3-.7 1.1-1 1.7-.7.7.3 1 1.1.7 1.7l-6.6 16c-.2.5-.6.8-1.2.8z'/%3E%3Cpath d='M50.9 22.4c.1-.8.2-1.6.2-2.4 0-7.4-6-13.4-13.4-13.4-4.5 0-8.7 2.3-11.2 6-1.2-.5-2.4-.8-3.7-.8-5.1 0-9.3 4.2-9.3 9.3v.3c-4.1 1.4-7 5.2-7 9.7 0 5.6 4.6 10.2 10.2 10.2h5c1.6 0 1.5-2.7 0-2.7h-5c-4.2 0-7.5-3.4-7.5-7.5 0-3.6 2.5-6.7 6.1-7.4l1.3-.3-.2-1.3c-.1-.4-.1-.7-.1-1.1 0-3.6 3-6.6 6.6-6.6 1.2 0 2.4.3 3.5 1l1.2.7.7-1.3c1.9-3.5 5.5-5.7 9.5-5.7 5.9 0 10.7 4.8 10.7 10.7 0 1.1-.2 2.2-.5 3.3l-.6 1.9 2.1-.1h.3c3.8 0 6.8 3.1 6.8 6.8 0 3.8-3.1 6.8-6.8 6.8h-5.7c-1.7 0-2 2.7 0 2.7h5.7c5.2 0 9.5-4.3 9.5-9.5-.1-4.7-3.7-8.7-8.4-9.3z'/%3E%3C/svg%3E",
+        "sleet": "data:image/svg+xml,%3Csvg id='weather-icon-sleet' class='weather-icon weather-icon-black sleet' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%2372B8D4;%7D%3C/style%3E%3Cpath class='st0' d='M22.3 57.4l-2.8.9-.9-2.7 2.8-.9zM22.6 52.7c-.1 0-.3 0-.4-.1-.6-.2-.9-.9-.7-1.6l5-12.3c.2-.6.9-.9 1.6-.7.6.3.9.9.6 1.6l-5 12.3c-.2.5-.7.8-1.1.8zM24.61 55.844l2.752-.918.918 2.75-2.75.92zM28.6 53c-.2 0-.3 0-.5-.1-.6-.2-.9-.9-.6-1.6l5-12.3c.2-.6.9-.9 1.6-.6.6.2.9.9.7 1.6l-5 12.3c-.3.4-.7.7-1.2.7zM30.71 55.828l2.75-.918.92 2.75-2.752.92zM34.6 53c-.1 0-.3 0-.5-.1-.6-.2-.9-.9-.6-1.6l5-12.3c.2-.6.9-.9 1.6-.6.6.2.9.9.6 1.6l-5 12.3c-.2.4-.6.7-1.1.7z'/%3E%3Cpath d='M50.9 24.2c.1-.8.2-1.6.2-2.4 0-7.4-6-13.4-13.4-13.4-4.5 0-8.7 2.3-11.2 6-1.2-.5-2.4-.8-3.6-.8-5.1 0-9.3 4.2-9.3 9.3v.3c-4.1 1.4-7 5.2-7 9.7 0 5.6 4.6 10.2 10.2 10.2h5c1.6 0 1.5-2.7 0-2.7h-5c-4.2 0-7.5-3.4-7.5-7.5 0-3.6 2.5-6.7 6.1-7.4l1.3-.3-.3-1.2c-.1-.4-.1-.8-.1-1.1 0-3.6 3-6.6 6.6-6.6 1.2 0 2.4.3 3.5 1l1.2.7.7-1.3c1.9-3.5 5.5-5.7 9.5-5.7 5.9 0 10.7 4.8 10.7 10.7 0 1.1-.2 2.2-.5 3.3l-.6 1.9 2.1-.1h.3c3.8 0 6.8 3.1 6.8 6.8 0 3.8-3.1 6.8-6.8 6.8h-5.7c-1.7 0-2 2.7 0 2.7h5.7c5.2 0 9.5-4.3 9.5-9.5-.1-4.8-3.8-8.8-8.4-9.4z'/%3E%3C/svg%3E",
+        "snow": "data:image/svg+xml,%3Csvg id='weather-icon-snow' class='weather-icon weather-icon-black snow' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%2372B8D4;%7D%3C/style%3E%3Cpath class='st0' d='M51.6 32h-5.2l2.2-2.2c.4-.4.4-1 0-1.4-.4-.4-1-.4-1.4 0L43.6 32h-8.3l5.9-5.9h5.1c.5 0 1-.4 1-1 0-.5-.4-1-1-1h-3.1l3.7-3.7c.4-.4.4-1 0-1.4-.4-.4-1-.4-1.4 0l-3.7 3.7v-3.1c0-.5-.4-1-1-1-.5 0-1 .4-1 1v5.1l-5.9 5.9v-8.3l3.6-3.6c.4-.4.4-1 0-1.4-.4-.4-1-.4-1.4 0l-2.2 2.2v-5.2c0-.5-.4-1-1-1-.5 0-1 .4-1 1v5.2l-2.2-2.2c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4l3.6 3.6v8.3L26 24.7v-5.1c0-.5-.4-1-1-1-.5 0-1 .4-1 1v3.1L20.3 19c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4l3.7 3.7h-3.1c-.5 0-1 .4-1 1 0 .5.4 1 1 1h5.1l5.9 5.9h-8.3l-3.6-3.6c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4l2.2 2.2h-5.2c-.5 0-1 .4-1 1 0 .5.4 1 1 1h5.2l-2.2 2.2c-.4.4-.4 1 0 1.4.2.2.4.3.7.3.2 0 .5-.1.7-.3l3.6-3.6h8.3l-5.9 5.9h-5.1c-.5 0-1 .4-1 1 0 .5.4 1 1 1h3.1L19 45.4c-.4.4-.4 1 0 1.4.2.2.4.3.7.3.2 0 .5-.1.7-.3l3.7-3.7v3.1c0 .5.4 1 1 1 .5 0 1-.4 1-1v-5.1l5.9-5.9v8.3l-3.6 3.6c-.4.4-.4 1 0 1.4.2.2.4.3.7.3.3 0 .5-.1.7-.3l2.2-2.2v5.2c0 .5.4 1 1 1 .5 0 1-.4 1-1v-5.2l2.2 2.2c.2.2.4.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4L34 43.5v-8.3l5.9 5.9v5.1c0 .5.4 1 1 1 .5 0 1-.4 1-1v-3.1l3.7 3.7c.2.2.4.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4l-3.7-3.7h3.1c.5 0 1-.4 1-1 0-.5-.4-1-1-1h-5.1l-5.9-5.9h8.3l3.6 3.6c.2.2.4.3.7.3.3 0 .5-.1.7-.3.4-.4.4-1 0-1.4l-2.2-2.2h5.2c.5 0 1-.4 1-1-.2-.4-.6-.8-1.1-.8z' id='snow'/%3E%3C/svg%3E",
+        "thunderstorm": "data:image/svg+xml,%3Csvg id='weather-icon-tstorms' class='weather-icon weather-icon-black tstorms' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E.st0%7Bfill:%232885C7;%7D .st1%7Bfill:%23F4A71D;%7D%3C/style%3E%3Cpath class='st0' d='M19.7 53c-.2 0-.4 0-.6-.1-.7-.3-.9-1.1-.6-1.8l2.8-5.8c.3-.7 1.1-.9 1.8-.6.7.3.9 1.1.6 1.8l-2.8 5.8c-.3.4-.7.7-1.2.7zM13.1 53c-.2 0-.4 0-.6-.1-.7-.3-.9-1.1-.6-1.8l2.8-5.8c.3-.7 1.1-.9 1.8-.6.7.3.9 1.1.6 1.8l-2.8 5.8c-.2.4-.7.7-1.2.7zM46.8 53c-.2 0-.4 0-.6-.1-.7-.3-.9-1.1-.6-1.8l2.8-5.8c.3-.7 1.1-.9 1.8-.6.7.3.9 1.1.6 1.8L48 52.3c-.2.4-.7.7-1.2.7zM40.2 53c-.2 0-.4 0-.6-.1-.7-.3-.9-1.1-.6-1.8l2.8-5.8c.3-.7 1.1-.9 1.8-.6.7.3.9 1.1.6 1.8l-2.8 5.8c-.2.4-.7.7-1.2.7z'/%3E%3Cpath class='st1' d='M27.7 59.3c-.2 0-.5-.1-.7-.2-.6-.4-.8-1.2-.4-1.8l7.9-13.1h-8.3L35.5 31c.4-.6 1.2-.7 1.8-.3.6.4.7 1.3.3 1.9l-6.4 9.1h7.9L28.8 58.6c-.2.4-.7.7-1.1.7z'/%3E%3Cpath d='M50.9 22.3c.1-.8.2-1.6.2-2.4 0-7.4-6-13.4-13.4-13.4-4.5 0-8.7 2.3-11.2 6-1.1-.5-2.4-.8-3.6-.8-5.1 0-9.3 4.2-9.3 9.3v.3c-4.1 1.4-7 5.2-7 9.7 0 5.6 4.6 10.2 10.2 10.2h5c1.6 0 1.5-2.6 0-2.6h-5c-4.2 0-7.5-3.4-7.5-7.5 0-3.6 2.5-6.7 6.1-7.4l1.3-.2-.2-1.3c-.1-.4-.1-.8-.1-1.1 0-3.6 3-6.6 6.6-6.6 1.2 0 2.4.3 3.5 1l1.2.7.7-1.3c1.9-3.5 5.5-5.7 9.5-5.7 5.9 0 10.7 4.8 10.7 10.7 0 1.1-.2 2.2-.5 3.3l-.8 1.8 2.1-.1h.3c3.8 0 6.8 3.1 6.8 6.8 0 3.8-3.1 6.8-6.8 6.8H44c-1.7 0-2 2.6 0 2.6h5.7c5.2 0 9.5-4.3 9.5-9.5 0-4.7-3.7-8.7-8.3-9.3z'/%3E%3C/svg%3E",
+        "wind": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAEtWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICB4bWxuczpleGlmPSJodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgdGlmZjpJbWFnZUxlbmd0aD0iMTI4IgogICB0aWZmOkltYWdlV2lkdGg9IjEyOCIKICAgdGlmZjpSZXNvbHV0aW9uVW5pdD0iMiIKICAgdGlmZjpYUmVzb2x1dGlvbj0iMTM5LjAiCiAgIHRpZmY6WVJlc29sdXRpb249IjEzOS4wIgogICBleGlmOlBpeGVsWERpbWVuc2lvbj0iMTI4IgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMTI4IgogICBleGlmOkNvbG9yU3BhY2U9IjEiCiAgIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiCiAgIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIKICAgeG1wOk1vZGlmeURhdGU9IjIw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"
+    }
+    const importance = {
+        "cloudy": 0,
+        "clear-day": 0,
+        "hail": 3,
+        "partly-cloudy-day": 0,
+        "partly-cloudy-night": 0,
+        "rain": 1,
+        "sleet": 4,
+        "snow": 5,
+        "thunderstorm": 6,
+        "wind": 2
+    }
+
+    screen.orientation.lock("landscape-primary")
+
+    const range = (start, stop, step = 1) =>
+        Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+
+    Date.prototype.round = function () {
+        var dateObj = new Date(this);
+        return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+    };
+
+    function movingAvg(array, countBefore, countAfter) {
+        if (countAfter == undefined) countAfter = 0;
+        const result = [];
+        for (let i = 0; i < array.length; i++) {
+            const subArr = array.slice(Math.max(i - countBefore, 0), Math.min(i + countAfter + 1, array.length));
+            const avg = subArr.reduce((a, b) => a + (isNaN(b) ? 0 : b), 0) / subArr.length;
+            result.push(avg);
+        }
+        return result;
+    }
+
+    function movingMax(array, countBefore, countAfter) {
+        if (countAfter == undefined) countAfter = 0;
+        const result = [];
+        for (let i = 0; i < array.length; i++) {
+            const subArr = array.slice(Math.max(i - countBefore, 0), Math.min(i + countAfter + 1, array.length));
+            const avg = subArr.reduce((a, b) => Math.max(a, b));
+            result.push(avg);
+        }
+        return result;
+    }
+    function movingMin(array, countBefore, countAfter) {
+        if (countAfter == undefined) countAfter = 0;
+        const result = [];
+        for (let i = 0; i < array.length; i++) {
+            const subArr = array.slice(Math.max(i - countBefore, 0), Math.min(i + countAfter + 1, array.length));
+            const avg = subArr.reduce((a, b) => Math.min(a, b));
+            result.push(avg);
+        }
+        return result;
+    }
+
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    function hours(n) {
+        return n * 60 * 60 * 1000
+    }
+
+
+    async function plotWeather() {
+        let searchParams = new URLSearchParams(window.location.search)
+        lat = searchParams.get("lat")
+        lon = searchParams.get("lon")
+        if (!lat || !lon) {
+            lat = 51.541
+            lon = 9.946
+        }
+        if (searchParams.has("city")) {
+            response = await fetch("https://raw.githubusercontent.com/pensnarik/german-cities/master/germany.json")
+            cities = await response.json()
+            city = cities.find(e => e.name === searchParams.get("city"))
+            if (city) {
+                lat = city.coords.lat
+                lon = city.coords.lon
+            }
+        }
+
+        past = 3
+        future = 8
+        if (searchParams.has("past")) {
+            past = searchParams.get("past")
+        }
+        if (searchParams.has("future")) {
+            future = searchParams.get("future")
+        }
+
+        start = new Date(Date.now() - past * 24 * 60 * 60 * 1000 - Date.now() % (24 * 60 * 60 * 1000) + new Date().getTimezoneOffset() * 60 * 1000)
+        end = new Date(Date.now() + future * 24 * 60 * 60 * 1000 - Date.now() % (24 * 60 * 60 * 1000) + new Date().getTimezoneOffset() * 60 * 1000)
+
+        var url = `https://api.brightsky.dev/weather?date=${start.toUTCString()}&last_date=${end.toUTCString()}&lat=${lat}&lon=${lon}`;
+
+        response = await fetch(url);
+        data = await response.json();
+        // console.log(data)
+        weather = data.weather;
+
+        iconinterval = (window.innerWidth > 2000 ? 2 : 3)
+
+        weather = weather.map(function (w, i) {
+            if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
+                if (importance[w.icon] < importance[weather[i + 1].icon]) {
+                    w.icon = weather[i + 1].icon
+                }
+            }
+            if (iconinterval == 3 && i > 0 && new Date(w.timestamp).getHours() % iconinterval == 0) {
+                if (importance[w.icon] < importance[weather[i - 1].icon]) {
+                    w.icon = weather[i - 1].icon
+                }
+            }
+            return w
+        })
+
+        sources = ""
+        for (s of data.sources) {
+            sources += `${s.observation_type}: ${s.station_name}   `
+        }
+        sources = sources.slice(0, -3)
+
+        document.title = `Wetter in ${data.sources[0].station_name}`
+
+        times = weather.map(w => new Date(w.timestamp));
+        temperatures = weather.map(w => w.temperature);
+        heights = movingMax(temperatures, 1, 1)
+        ticktimes = times.filter(x => x.getHours() % 3 == 0);
+
+        var temp = {
+            name: "Temperature",
+            mode: "lines",
+            x: times,
+            y: temperatures,
+            type: 'scatter',
+            line: {
+                color: 'red',
+                width: 2
+            }
+        }
+        var tempT = {
+            name: "Temperature",
+            showlegend: false,
+            mode: "text",
+            x: times.slice(1, -1),
+            y: heights.slice(1, -1),
+            type: 'scatter',
+            text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
+            textfont: { color: "red", size: 10 },
+            textposition: 'top',
+        }
+        var dew = {
+            name: "Dew point",
+            mode: "lines",
+            x: times,
+            y: weather.map(w => w.dew_point),
+            type: 'scatter',
+            line: {
+                color: 'blue',
+                width: 2,
+            }
+        };
+
+        var prec = {
+            name: "Precipitation",
+            x: times,
+            y: weather.map(w => w.precipitation - 0.07),
+            type: 'scatter',
+            fill: 'tozeroy',
+            yaxis: 'y2',
+            marker: {
+                color: 'blue'
+            }
+        };
+
+        var sun = {
+            x: times,
+            name: "Sunshine",
+            y: weather.map(w => w.sunshine),
+            type: 'scatter',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(255,165,0, 0.05)',
+            yaxis: 'y3',
+            line: {
+                color: 'rgba(255,165,0, 0.3)',
+                width: 2,
+            }
+        };
+
+        ymin = Math.min(...weather.map(w => w.dew_point)) - 1
+        ymax = Math.max(...temperatures) + 4
+
+        var layout = {
+            showlegend: false,
+            height: window.innerHeight / 2 - 10,
+            margin: {
+                b: 1,
+                t: 50
+            },
+            yaxis: {
+                tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
+            },
+            yaxis2: {
+                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm/h", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false,
+            },
+            yaxis3: {
+                side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
+            },
+            xaxis: {
+                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true,
+                ticktext: ticktimes.map(x => x.getHours() % 24 == 12 ? x.toLocaleDateString("de-de", { weekday: "short" }) + "<br>" + x.toLocaleDateString("de-de", { month: "short", day: "numeric" }) : "")
+            },
+            shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
+                type: 'line', xref: 'x', yref: 'paper', x0: x, y0: 0, x1: x, y1: 1, opacity: x.getHours() == 0 ? 0.3 : (x.getHours() % 6 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+            })).concat(times.filter(x => x.getHours() == 0).map(x => ({
+                type: 'rect', xref: 'x', yref: 'paper', x0: x.getTime() - hours(6), y0: 0, x1: x.getTime() + hours(6), y1: 1, opacity: 0.04, fillcolor: "000", layer: "below"
+            }))).concat(range(ymin - (ymin % 1), ymax, 1).map(y => ({
+                type: 'line', xref: 'paper', yref: 'y', x0: 0, y0: y, x1: 1, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+            }))).concat([{
+                type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
+            }]),
+            images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
+                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.7, sizex: 60 * 60 * 1000 * (window.innerWidth > 2000 ? 2.5 : 3.6), sizey: 5, source: icons[x[0].icon], layer: "above"
+            })).slice(1, -1)
+        }
+        fig = Plotly.newPlot('div1', [dew, sun, prec, temp, tempT], layout, { displayModeBar: false });
+
+
+
+        var wind = {
+            name: "Wind speed",
+            x: times,
+            y: weather.map(w => w.wind_speed),
+            type: 'scatter',
+            line: {
+                color: 'grey',
+                width: 2,
+            }
+        };
+
+        var gust = {
+            name: "Gust speed",
+            x: times,
+            y: weather.map(w => w.wind_gust_speed),
+            type: 'scatter',
+            line: {
+                color: 'orange',
+                width: 2,
+            }
+        };
+
+        var pres = {
+            name: "Atmospheric Pressure",
+            x: times,
+            y: weather.map(w => w.pressure_msl),
+            type: 'scatter',
+            yaxis: 'y2',
+            line: {
+                color: 'red',
+                width: 2,
+            }
+        };
+
+        ymin = 0
+        ymax = Math.max(...weather.map(w => w.wind_gust_speed)) + 5
+        heights = movingMax(weather.map(w => w.wind_gust_speed), 1, 1)
+
+        var layout = {
+            showlegend: true,
+            legend: {
+                x: 1,
+                orientation: "h",
+                xanchor: 'right',
+                yanchor: 'top',
+                bgcolor: 'transparent',
+                y: 0
+            },
+            height: window.innerHeight / 2 - 10,
+            margin: {
+                t: 20,
+                b: 40
+            },
+            yaxis: {
+                tickvals: range(0, ymax, 10), ticksuffix: ' km/h ', range: [ymin, ymax], zeroline: false, showline: true, linewidth: 1, showgrid: false, fixedrange: true,
+            },
+            yaxis2: {
+                overlaying: 'y', side: "right", tickprefix: " ", ticksuffix: " hPa", showgrid: false, showgrid: false, showline: true, zeroline: false, fixedrange: true,
+            },
+            xaxis: {
+                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, zeroline: false,
+                ticktext: ticktimes.map(x => x.getHours().toString().padStart(2, "0"))
+            },
+            shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
+                type: 'line', xref: 'x', yref: 'paper', x0: x, y0: 0, x1: x, y1: 1, opacity: x.getHours() == 0 ? 0.3 : (x.getHours() % 6 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+            })).concat(times.filter(x => x.getHours() == 0).map(x => ({
+                type: 'rect', xref: 'x', yref: 'paper', x0: x.getTime() - hours(6), y0: 0, x1: x.getTime() + hours(6), y1: 1, opacity: 0.04, fillcolor: "000", layer: "below"
+            }))).concat(range(ymin - (ymin % 2.5), ymax, 2.5).map(y => ({
+                type: 'line', xref: 'paper', yref: 'y', x0: 0, y0: y, x1: 1, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+            }))).concat([{
+                type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
+            }]),
+            annotations: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
+                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1], layer: "above", text: "⟶", align: 'center', showarrow: false, textangle: x[0].wind_direction + 90,
+                font: {
+                    color: "orange", size: 18
+
+                }
+            })).slice(1, -1).concat([{
+                xref: 'paper', yref: 'paper', xanchor: "left", yanchor: "top", x: 0, y: -0.01, text: sources, align: 'right', showarrow: false, textangle: 0,
+                font: {
+                    color: "#505050", size: 12
+                }
+            }])
+        }
+        var temp = {
+            name: "Temperature", mode: "lines", x: times, y: [null], type: 'scatter', line: { color: 'red', width: 2 }
+        }
+        var dew = {
+            name: "Dew point", mode: "lines", x: times, y: [null], type: 'scatter', line: { color: 'blue', width: 2, }
+        };
+        var prec = {
+            name: "Precipitation", mode: "lines", x: times, y: [null], type: 'scatter', fill: 'tozeroy', line: { color: 'blue' }
+        };
+        var sun = {
+            name: "Sunshine", mode: "lines", x: times, y: [null], type: 'scatter', fill: 'tozeroy', fillcolor: 'rgba(255,165,0, 0.05)', line: { color: 'rgba(255,165,0, 0.3)', width: 2, }
+        };
+
+
+        Plotly.newPlot('div2', [temp, dew, prec, sun, wind, gust, pres], layout, { displayModeBar: false });
+    }
+
+    plotWeather();
+
+    window.addEventListener('resize', plotWeather);
+
+</script>
