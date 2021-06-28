@@ -293,7 +293,7 @@
                 xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.025 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 5, source: icons[x[0].icon], layer: "above"
             })).slice(1, -1)
         }
-        fig = Plotly.newPlot('div1', [dew, sun, prec, temp, tempT], layout, { displayModeBar: false });
+        fig = Plotly.newPlot('div1', [dew, sun, prec, temp, tempT], layout, { displayModeBar: false, staticPlot: true });
     }
 
     plotWeather();
