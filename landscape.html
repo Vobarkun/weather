@@ -292,7 +292,7 @@
             }))).concat(range(ymin - (ymin % 1), ymax, 1).map(y => ({
                 type: 'line', xref: 'paper', yref: 'y', x0: 0, y0: y, x1: 1, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
             }))).concat([{
-                type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
+                type: 'rect', xref: 'x', yref: 'paper', x0: times[0], y0: 0, x1: Date.now(), y1: 1, opacity: 0.6, fillcolor: "fff", layer: "above", line: { width: 0 }
             }]),
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
                 xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.025 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 5, source: icons[x[0].icon], layer: "above"
