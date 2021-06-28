@@ -21,13 +21,21 @@
         * {
             cursor: auto !important
         }
+
+        #wrapper {
+            transform: translateY(100vh) rotate(-90deg);
+            transform-origin: 0% 0%;
+            width: 100vh;
+            height: 200px !important;
+        }
     </style>
 </head>
 
 <body>
-    <div id='div1'> </div>
-    <div id='div2'> </div>
-    <div id='div3'> </div>
+    <div id='wrapper'>
+        <div id='div1'> </div>
+        <div id='div2'> </div>
+    </div>
 </body>
 <script>
     const icons = {
@@ -250,10 +258,10 @@
 
         var layout = {
             showlegend: false,
-            height: window.innerHeight / 2 - 10,
+            height: window.innerWidth-50,
             margin: {
                 b: 1,
-                t: 50
+                t: 30
             },
             yaxis: {
                 tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
@@ -384,7 +392,7 @@
         };
 
 
-        Plotly.newPlot('div2', [temp, dew, prec, sun, wind, gust, pres], layout, { displayModeBar: false });
+        // Plotly.newPlot('div2', [temp, dew, prec, sun, wind, gust, pres], layout, { displayModeBar: false });
     }
 
     plotWeather();
