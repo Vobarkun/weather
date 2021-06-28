@@ -332,7 +332,7 @@
                 overlaying: 'y3', side: "right", tickprefix: " ", dtick: 2, ticksuffix: " hPa", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
             },
             xaxis: {
-                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.98], 
+                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.985], 
                 ticktext: ticktimes.map(x => x.getHours() % 24 == 12 ? x.toLocaleDateString("de-de", { weekday: "short" }) + "  " + x.toLocaleDateString("de-de", { month: "short", day: "numeric" }) : "")
             },
             shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
@@ -340,7 +340,7 @@
             })).concat(times.filter(x => x.getHours() == 0).map(x => ({
                 type: 'rect', xref: 'x', yref: 'paper', x0: x.getTime() - hours(6), y0: 0, x1: x.getTime() + hours(6), y1: 1, opacity: 0.04, fillcolor: "000", layer: "below"
             }))).concat(range(ymin - (ymin % 1), ymax, 1).map(y => ({
-                type: 'line', xref: 'paper', yref: 'y', x0: 0, y0: y, x1: 1, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+                type: 'line', xref: 'paper', yref: 'y', x0: 0.03, y0: y, x1: 0.985, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
             }))).concat([{
                 type: 'rect', xref: 'x', yref: 'paper', x0: times[0], y0: 0, x1: Date.now(), y1: 1, opacity: 0.6, fillcolor: "fff", layer: "above", line: { width: 0 }
             }]),
