@@ -145,13 +145,13 @@
             }
         }
 
-        past = 1
-        future = 8
+        past = 0
+        future = 7
         if (searchParams.has("past")) {
-            past = searchParams.get("past")
+            past = parseInt(searchParams.get("past"))
         }
         if (searchParams.has("future")) {
-            future = searchParams.get("future")
+            future = parseInt(searchParams.get("future"))
         }
 
         start = new Date(Date.now() - past * 24 * 60 * 60 * 1000 - Date.now() % (24 * 60 * 60 * 1000) + new Date().getTimezoneOffset() * 60 * 1000)
@@ -163,8 +163,7 @@
         data = await response.json();
         // console.log(data)
         weather = data.weather;
-
-        iconinterval = 3
+        iconinterval = future + past > 5 ? 3 : 2
 
         weather = weather.map(function (w, i) {
             if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
@@ -190,7 +189,7 @@
 
         times = weather.map(w => new Date(w.timestamp));
         temperatures = weather.map(w => w.temperature);
-        heights = movingMax(temperatures, 2, 2)
+        heights = movingMax(temperatures, future + past > 5 ? 2 : 1, future + past > 5 ? 2 : 1)
         ticktimes = times.filter(x => x.getHours() % 3 == 0);
 
         var temp = {
@@ -253,42 +252,8 @@
             }
         };
 
-        var wind = {
-            name: "Wind speed",
-            x: times,
-            y: weather.map(w => w.wind_speed),
-            type: 'scatter',
-            line: {
-                color: 'grey',
-                width: 2,
-            }
-        };
-
-        var gust = {
-            name: "Gust speed",
-            x: times,
-            y: weather.map(w => w.wind_gust_speed),
-            type: 'scatter',
-            line: {
-                color: 'orange',
-                width: 2,
-            }
-        };
-
-        var pres = {
-            name: "Atmospheric Pressure",
-            x: times,
-            y: weather.map(w => w.pressure_msl),
-            type: 'scatter',
-            yaxis: 'y2',
-            line: {
-                color: 'red',
-                width: 2,
-            }
-        };
-
         ymin = Math.min(...weather.map(w => w.dew_point)) - 1
-        ymax = Math.max(...temperatures) + 4
+        ymax = Math.max(...temperatures) + 2
 
         var layout = {
             showlegend: false,
@@ -304,7 +269,7 @@
                 tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
             },
             yaxis2: {
-                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm/h", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false,
+                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false,
             },
             yaxis3: {
                 side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
@@ -323,65 +288,10 @@
                 type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
             }]),
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
-                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.7, sizex: 60 * 60 * 1000 * (window.innerWidth > 2000 ? 2.5 : 3.6), sizey: 5, source: icons[x[0].icon], layer: "above"
+                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.025 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 5, source: icons[x[0].icon], layer: "above"
             })).slice(1, -1)
         }
         fig = Plotly.newPlot('div1', [dew, sun, prec, temp, tempT], layout, { displayModeBar: false });
-
-
-        ymin = 0
-        ymax = Math.max(...weather.map(w => w.wind_gust_speed)) + 5
-        heights = movingMax(weather.map(w => w.wind_gust_speed), 1, 1)
-
-        var layout = {
-            showlegend: true,
-            legend: {
-                x: 1,
-                orientation: "h",
-                xanchor: 'right',
-                yanchor: 'top',
-                bgcolor: 'transparent',
-                y: 0
-            },
-            height: window.innerHeight / 2 - 10,
-            margin: {
-                t: 20,
-                b: 40
-            },
-            yaxis: {
-                tickvals: range(0, ymax, 10), ticksuffix: ' km/h ', range: [ymin, ymax], zeroline: false, showline: true, linewidth: 1, showgrid: false, fixedrange: true,
-            },
-            yaxis2: {
-                overlaying: 'y', side: "right", tickprefix: " ", ticksuffix: " hPa", showgrid: false, showgrid: false, showline: true, zeroline: false, fixedrange: true,
-            },
-            xaxis: {
-                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, zeroline: false,
-                ticktext: ticktimes.map(x => x.getHours().toString().padStart(2, "0"))
-            },
-            shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
-                type: 'line', xref: 'x', yref: 'paper', x0: x, y0: 0, x1: x, y1: 1, opacity: x.getHours() == 0 ? 0.3 : (x.getHours() % 6 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
-            })).concat(times.filter(x => x.getHours() == 0).map(x => ({
-                type: 'rect', xref: 'x', yref: 'paper', x0: x.getTime() - hours(6), y0: 0, x1: x.getTime() + hours(6), y1: 1, opacity: 0.04, fillcolor: "000", layer: "below"
-            }))).concat(range(ymin - (ymin % 2.5), ymax, 2.5).map(y => ({
-                type: 'line', xref: 'paper', yref: 'y', x0: 0, y0: y, x1: 1, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
-            }))).concat([{
-                type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 1 }
-            }]),
-            annotations: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
-                xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1], layer: "above", text: "⟶", align: 'center', showarrow: false, textangle: x[0].wind_direction + 90,
-                font: {
-                    color: "orange", size: 18
-
-                }
-            })).slice(1, -1).concat([{
-                xref: 'paper', yref: 'paper', xanchor: "left", yanchor: "top", x: 0, y: -0.01, text: sources, align: 'right', showarrow: false, textangle: 0,
-                font: {
-                    color: "#505050", size: 12
-                }
-            }])
-        }
-
-        // Plotly.newPlot('div2', [temp, dew, prec, sun, wind, gust, pres], layout, { displayModeBar: false });
     }
 
     plotWeather();
