@@ -257,17 +257,61 @@
             }
         };
 
+        var wind = {
+            name: "Wind speed",
+            x: times,
+            y: weather.map(w => w.wind_speed),
+            type: 'scatter',
+            yaxis: 'y4',
+            line: {
+                color: 'lightblue',
+                width: 2,
+            }
+        };
+
+        var gust = {
+            name: "Gust speed",
+            x: times,
+            y: weather.map(w => w.wind_gust_speed),
+            type: 'scatter',
+            yaxis: 'y4',
+            line: {
+                color: 'lightblue',
+                width: 2,
+            }
+        };
+
+        var pres = {
+            name: "Atmospheric Pressure",
+            x: times,
+            y: weather.map(w => w.pressure_msl),
+            type: 'scatter',
+            yaxis: 'y5',
+            line: {
+                color: 'grey',
+                width: 2,
+            }
+        };
+
         ymin = Math.min(...weather.map(w => w.dew_point)) - 1
         ymax = Math.max(...temperatures) + 2
 
         var layout = {
-            showlegend: false,
+            showlegend: true,
             font: {
                 size: 22,
             },
-            height: window.innerWidth - 50,
+            legend: {
+                x: 0.98,
+                orientation: "h",
+                xanchor: 'right',
+                yanchor: 'top',
+                bgcolor: 'transparent',
+                y: 0
+            },
+            height: window.innerWidth - 10,
             margin: {
-                b: 1,
+                b: 0,
                 t: 30,
                 r: 35,
                 l: 50
@@ -281,8 +325,14 @@
             yaxis3: {
                 side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
             },
+            yaxis4: {
+                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
+            },
+            yaxis5: {
+                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 2, ticksuffix: " hPa", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
+            },
             xaxis: {
-                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true,
+                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.98], 
                 ticktext: ticktimes.map(x => x.getHours() % 24 == 12 ? x.toLocaleDateString("de-de", { weekday: "short" }) + "  " + x.toLocaleDateString("de-de", { month: "short", day: "numeric" }) : "")
             },
             shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
@@ -296,9 +346,15 @@
             }]),
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
                 xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.025 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 5, source: icons[x[0].icon], layer: "above"
-            })).slice(1, -1)
+            })).slice(1, -1),
+            annotations: [{
+                xref: 'paper', yref: 'paper', xanchor: "left", yanchor: "top", x: 0.03, y: -0.01, text: sources, align: 'right', showarrow: false, textangle: 0,
+                font: {
+                    color: "#505050", size: 18
+                }
+            }]
         }
-        fig = Plotly.newPlot('div1', [dew, sun, prec, temp, tempT], layout, { displayModeBar: false, staticPlot: true });
+        fig = Plotly.newPlot('div1', [wind, gust, pres, dew, sun, prec, temp, tempT], layout, { displayModeBar: false, staticPlot: true });
     }
 
     plotWeather();
