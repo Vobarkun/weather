@@ -263,13 +263,15 @@
             height: window.innerWidth-50,
             margin: {
                 b: 1,
-                t: 30
+                t: 30,
+                r: 35,
+                l: 35
             },
             yaxis: {
-                tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true,
+                tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true, tickangle: -90
             },
             yaxis2: {
-                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false,
+                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false, tickangle: -90
             },
             yaxis3: {
                 side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
