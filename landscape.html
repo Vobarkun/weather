@@ -326,7 +326,7 @@
                 side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
             },
             yaxis4: {
-                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
+                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, range: [0,Math.max(...gust.y)*1.1], zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
             },
             yaxis5: {
                 overlaying: 'y3', side: "right", tickprefix: " ", dtick: 2, ticksuffix: " hPa", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
