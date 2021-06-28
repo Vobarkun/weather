@@ -216,7 +216,7 @@
             y: heights.slice(1, -1),
             type: 'scatter',
             text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
-            textfont: { color: "red", size: 20 },
+            textfont: { color: "red", size: 22 },
             textposition: 'top',
         }
         var dew = {
