@@ -203,6 +203,7 @@
             x: times,
             y: temperatures,
             type: 'scatter',
+            yaxis: 'y6',
             line: {
                 color: 'red',
                 width: 2
@@ -215,6 +216,7 @@
             x: times.slice(1, -1),
             y: heights.slice(1, -1),
             type: 'scatter',
+            yaxis: 'y6',
             text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
             textfont: { color: "red", size: 22 },
             textposition: 'top',
@@ -224,6 +226,7 @@
             mode: "lines",
             x: times,
             y: weather.map(w => w.dew_point),
+            yaxis: 'y6',
             type: 'scatter',
             line: {
                 color: 'blue',
@@ -326,13 +329,16 @@
                 side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
             },
             yaxis4: {
-                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, range: [0,Math.max(...gust.y)*1.1], zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
+                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, range: [0, Math.max(...gust.y) * 1.1], zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
             },
             yaxis5: {
                 overlaying: 'y3', side: "right", tickprefix: " ", dtick: 2, ticksuffix: " hPa", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
             },
+            yaxis6: {
+                tickvals: [], range: [ymin, ymax], zeroline: false, showline: false, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true, tickangle: -90
+            },
             xaxis: {
-                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.985], 
+                tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.985],
                 ticktext: ticktimes.map(x => x.getHours() % 24 == 12 ? x.toLocaleDateString("de-de", { weekday: "short" }) + "  " + x.toLocaleDateString("de-de", { month: "short", day: "numeric" }) : "")
             },
             shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
