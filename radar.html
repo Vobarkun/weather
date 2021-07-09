@@ -100,18 +100,21 @@
         if (now - then > (i == 0 ? 300 : delay)) {
             then = now
 
+            if (times[0].isBefore(dayjs().subtract(10, "minute"))) {
+                times = []
+                now = dayjs().set("minute", 5 * Math.floor(dayjs().get("minute") / 5))
+                for (var j = 5; j < 60 * hours; j += 5) {
+                    times.push(now.subtract(j, "minute"))
+                }
+                suffixes = times.map(d => d.format("YYYYMMDD_HHmm")).reverse()
+                i = Math.max(0, i - 1)
+            }
+
             document.getElementById("radar").src = `http://iras.skywarn.de/radardaten/public/public_large_${suffixes[i]}.gif`
             document.getElementById("clock").innerHTML = suffixes[i].slice(-4, -2) + ":" + suffixes[i].slice(-2) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dayjs().format("HH:mm")
+
             i++;
             if (i >= suffixes.length) {
-                if (times[0].isBefore(dayjs().subtract(10, "minute"))) {
-                    times = []
-                    now = dayjs().set("minute", 5 * Math.floor(dayjs().get("minute") / 5))
-                    for (var j = 5; j < 60 * hours; j += 5) {
-                        times.push(now.subtract(j, "minute"))
-                    }
-                    suffixes = times.map(d => d.format("YYYYMMDD_HHmm")).reverse()
-                }
                 i = 0
             }
         } else {
