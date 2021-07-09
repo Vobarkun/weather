@@ -9,7 +9,40 @@
         html,
         body {
             height: 100%;
-            overflow: hidden
+            overflow: hidden;
+            margin: 0
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: calc(938/750 * 100vw)
+        }
+
+        #radar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            mix-blend-mode: lighten;
+        }
+
+        #clock {
+            position: fixed;
+            bottom: 1;
+            left: 1.2%;
+            font-size: 80;
+            z-index: 100;
+            color: white;
+            text-shadow: 2px 2px 8px #000000;
+            text-align: center;
+        }
+
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%
         }
     </style>
 </head>
@@ -18,15 +51,23 @@
     <div id='div1'> </div>
     <div id='div2'> </div>
     <div id='div3'> </div>
-    <div style="position: relative; width: 100vw">
-        <img style="position:absolute; top:0; left:0; width:100%" src="http://iras.skywarn.de/public/data/hintergrund_composit_mercator800.gif">
-        <img style="position:absolute; top:0; left:0; width:100%" id="radar" src="http://iras.skywarn.de/radardaten/public/public_20210706_2110.gif">
+    <div id="container">
+        <img id="background" src="http://iras.skywarn.de/public/data/hintergrund_composit_mercator1600.gif">
+        <img id="radar" src="http://iras.skywarn.de/radardaten/public/public_large_20210706_2110.gif">
+        <!-- <div id="goe">●</div> -->
+        <div id="clock">00:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:00</div>
     </div>
 </body>
 <script>
+    let searchParams = new URLSearchParams(window.location.search)
+    hours = parseInt(searchParams.get("hours") ?? 6)
+    delay = 1000 / (parseInt(searchParams.get("fps") ?? 30))
+
+    // document.getElementById("ctime").innerText = dayjs().format("HH:mm")
+
     times = []
     now = dayjs().set("minute", 5 * Math.floor(dayjs().get("minute") / 5))
-    for (var i = 5; i < 60 * 8; i += 5) {
+    for (var i = 5; i < 60 * hours; i += 5) {
         times.push(now.subtract(i, "minute"))
     }
     suffixes = times.map(d => d.format("YYYYMMDD_HHmm")).reverse()
@@ -37,11 +78,29 @@
     document.getElementById("radar").onload = function () {
         window.requestAnimationFrame(animate);
     }
+
+    function setPosition(el) {
+        el.style.top = Math.min(window.visualViewport.offsetTop + 0.9*window.visualViewport.height, background.height - 0.08*window.visualViewport.height) + "px";
+        el.style.left = window.visualViewport.offsetLeft + "px";
+        el.style.width = window.visualViewport.width + "px";
+        el.style.fontSize = window.visualViewport.width/8;
+    }
+
+    function onWindowScroll() {
+        setPosition(clock)
+    }
+    onWindowScroll();
+
+    window.visualViewport.addEventListener("resize", onWindowScroll);
+    window.visualViewport.addEventListener("scroll", onWindowScroll);
+    window.addEventListener('scroll', onWindowScroll);
+
     function animate() {
         now = Date.now()
-        if (now - then > 20) {
+        if (now - then > (i == 0 ? 300 : delay)) {
             then = now
-            document.getElementById("radar").src = `http://iras.skywarn.de/radardaten/public/public_${suffixes[i]}.gif`
+            document.getElementById("radar").src = `http://iras.skywarn.de/radardaten/public/public_large_${suffixes[i]}.gif`
+            document.getElementById("clock").innerHTML = suffixes[i].slice(-4, -2) + ":" + suffixes[i].slice(-2) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + dayjs().format("HH:mm")
             i++;
             if (i >= suffixes.length) {
                 i = 0
