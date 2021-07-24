@@ -79,6 +79,8 @@
         window.visualViewport.addEventListener("resize", onWindowScroll);
         window.visualViewport.addEventListener("scroll", onWindowScroll);
         window.addEventListener('scroll', onWindowScroll);
+
+        setTimeout(onWindowScroll, 300);
     }
 
     times = []

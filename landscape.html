@@ -70,8 +70,6 @@
         "wind": 2
     }
 
-    screen.orientation.lock("landscape-primary")
-
     const range = (start, stop, step = 1) =>
         Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 
@@ -134,12 +132,9 @@
 
     async function plotWeather() {
         let searchParams = new URLSearchParams(window.location.search)
-        lat = searchParams.get("lat")
-        lon = searchParams.get("lon")
-        if (!lat || !lon) {
-            lat = 51.541
-            lon = 9.946
-        }
+        lat = searchParams.get("lat") ?? 51.541
+        lon = searchParams.get("lon") ?? 9.946
+
         if (searchParams.has("city")) {
             response = await fetch("https://raw.githubusercontent.com/pensnarik/german-cities/master/germany.json")
             cities = await response.json()
@@ -150,14 +145,9 @@
             }
         }
 
-        past = 0
-        future = 7
-        if (searchParams.has("past")) {
-            past = parseInt(searchParams.get("past"))
-        }
-        if (searchParams.has("future")) {
-            future = parseInt(searchParams.get("future"))
-        }
+        past = parseInt(searchParams.get("past") ?? 0)
+        future = parseInt(searchParams.get("future") ?? 7)
+        iconinterval = future + past > 5 ? 3 : 2
 
         start = new Date(Date.now() - past * 24 * 60 * 60 * 1000 - Date.now() % (24 * 60 * 60 * 1000) + new Date().getTimezoneOffset() * 60 * 1000)
         end = new Date(Date.now() + future * 24 * 60 * 60 * 1000 - Date.now() % (24 * 60 * 60 * 1000) + new Date().getTimezoneOffset() * 60 * 1000)
@@ -166,9 +156,8 @@
 
         response = await fetch(url);
         data = await response.json();
-        // console.log(data)
         weather = data.weather;
-        iconinterval = future + past > 5 ? 3 : 2
+
 
         weather = weather.map(function (w, i) {
             if (i < weather.length - 1 && new Date(w.timestamp).getHours() % iconinterval == 0) {
@@ -198,102 +187,37 @@
         ticktimes = times.filter(x => x.getHours() % 3 == 0);
 
         var temp = {
-            name: "Temperature",
-            mode: "lines",
-            x: times,
-            y: temperatures,
-            type: 'scatter',
-            yaxis: 'y6',
-            line: {
-                color: 'red',
-                width: 2
-            }
+            name: "Temperature", x: times, y: temperatures,
+            type: 'scatter', yaxis: 'y6', line: { color: 'red', width: 2 }
         }
         var tempT = {
-            name: "Temperature",
-            showlegend: false,
-            mode: "text",
-            x: times.slice(1, -1),
-            y: heights.slice(1, -1),
-            type: 'scatter',
-            yaxis: 'y6',
+            name: "Temperature", showlegend: false, mode: "text", x: times.slice(1, -1), y: heights.slice(1, -1),
             text: weather.map(w => new Date(w.timestamp).getHours() % iconinterval == 0 ? Math.round(w.temperature) : "").slice(1, -1),
-            textfont: { color: "red", size: 22 },
-            textposition: 'top',
+            type: 'scatter', yaxis: 'y6', textfont: { color: "red", size: 22 }, textposition: 'top'
         }
         var dew = {
-            name: "Dew point",
-            mode: "lines",
-            x: times,
-            y: weather.map(w => w.dew_point),
-            yaxis: 'y6',
-            type: 'scatter',
-            line: {
-                color: 'blue',
-                width: 2,
-            }
+            name: "Dew point", x: times, y: weather.map(w => w.dew_point),
+            type: 'scatter', yaxis: 'y6', line: { color: 'blue', width: 2, }
         };
-
         var prec = {
-            name: "Precipitation",
-            x: times,
-            y: weather.map(w => w.precipitation - 0.07),
-            type: 'scatter',
-            fill: 'tozeroy',
-            yaxis: 'y2',
-            marker: {
-                color: 'blue'
-            }
+            name: "Precipitation", x: times, y: weather.map(w => w.precipitation - 0.07),
+            type: 'scatter', yaxis: 'y2', fill: 'tozeroy', marker: { color: 'blue' }
         };
-
         var sun = {
-            x: times,
-            name: "Sunshine",
-            y: weather.map(w => w.sunshine),
-            type: 'scatter',
-            fill: 'tozeroy',
-            fillcolor: 'rgba(255,165,0, 0.05)',
-            yaxis: 'y3',
-            line: {
-                color: 'rgba(255,165,0, 0.3)',
-                width: 2,
-            }
+            name: "Sunshine", x: times, y: weather.map(w => w.sunshine),
+            type: 'scatter', yaxis: 'y3', line: { color: 'rgba(255,165,0, 0.3)', width: 2, }, fill: 'tozeroy', fillcolor: 'rgba(255,165,0, 0.05)'
         };
-
         var wind = {
-            name: "Wind speed",
-            x: times,
-            y: weather.map(w => w.wind_speed),
-            type: 'scatter',
-            yaxis: 'y4',
-            line: {
-                color: 'lightblue',
-                width: 2,
-            }
+            name: "Wind speed", x: times, y: weather.map(w => w.wind_speed),
+            type: 'scatter', yaxis: 'y4', line: { color: 'lightblue', width: 2, }
         };
-
         var gust = {
-            name: "Gust speed",
-            x: times,
-            y: weather.map(w => w.wind_gust_speed),
-            type: 'scatter',
-            yaxis: 'y4',
-            line: {
-                color: 'lightblue',
-                width: 2,
-            }
+            name: "Gust speed", x: times, y: weather.map(w => w.wind_gust_speed),
+            type: 'scatter', yaxis: 'y4', line: { color: 'lightblue', width: 2, }
         };
-
         var pres = {
-            name: "Atmospheric Pressure",
-            x: times,
-            y: weather.map(w => w.pressure_msl),
-            type: 'scatter',
-            yaxis: 'y5',
-            line: {
-                color: 'grey',
-                width: 2,
-            }
+            name: "Atmospheric Pressure", x: times, y: weather.map(w => w.pressure_msl),
+            type: 'scatter', yaxis: 'y5', line: { color: 'grey', width: 2, }
         };
 
         ymin = Math.min(...weather.map(w => w.dew_point)) - 1
@@ -305,61 +229,56 @@
                 size: 22,
             },
             legend: {
-                x: 0.98,
-                orientation: "h",
-                xanchor: 'right',
-                yanchor: 'top',
-                bgcolor: 'transparent',
-                y: 0
+                x: 0.98, orientation: "h", xanchor: 'right', yanchor: 'top', bgcolor: 'transparent', y: 0
             },
             height: window.innerWidth - 10,
             margin: {
-                b: 0,
-                t: 30,
-                r: 35,
-                l: 40
+                b: 0, t: 30, r: 35, l: 40
             },
-            yaxis: {
-                tickmode: "linear", tick0: 0, dtick: 5, ticksuffix: '°C ', range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true, tickangle: -90
-            },
-            yaxis2: {
-                overlaying: 'y3', side: "right", tickprefix: " ", ticksuffix: " mm", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false, tickangle: -90
-            },
-            yaxis3: {
-                side: "right", tickprefix: " ", ticksuffix: " min", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
-            },
-            yaxis4: {
-                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 10, ticksuffix: " km/h", showgrid: false, showgrid: false, showline: false, fixedrange: true, range: [0, Math.max(...gust.y) * 1.1], zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
-            },
-            yaxis5: {
-                overlaying: 'y3', side: "right", tickprefix: " ", dtick: 2, ticksuffix: " hPa", showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
-            },
-            yaxis6: {
-                tickvals: [], range: [ymin, ymax], zeroline: false, showline: false, mirror: "ticks", linewidth: 1, overlaying: 'y3', showgrid: false, fixedrange: true, tickangle: -90
-            },
+
             xaxis: {
                 tickmode: "array", side: "top", tickvals: ticktimes, showline: true, mirror: "ticks", linewidth: 1, range: [start, end], tickangle: 0, showgrid: false, fixedrange: true, domain: [0.03, 0.985],
                 ticktext: ticktimes.map(x => x.getHours() % 24 == 12 ? x.toLocaleDateString("de-de", { weekday: "short" }) + "  " + x.toLocaleDateString("de-de", { month: "short", day: "numeric" }) : "")
             },
+
+            yaxis: {
+                tickprefix: " ", ticksuffix: "°C ", overlaying: 'y3', tickmode: "linear", tick0: 0, dtick: 5, range: [ymin, ymax], zeroline: false, showline: true, mirror: "ticks", linewidth: 1, showgrid: false, fixedrange: true, tickangle: -90
+            },
+            yaxis2: {
+                tickprefix: " ", ticksuffix: " mm", overlaying: 'y3', side: "right", showgrid: false, range: [0, Math.max(20, Math.max(...weather.map(w => w.precipitation)) + 1)], showgrid: false, showline: true, fixedrange: true, zeroline: false, tickangle: -90
+            },
+            yaxis3: {
+                tickprefix: " ", ticksuffix: " min", side: "right", showgrid: false, tickvals: [], range: [0, 60], showgrid: false, fixedrange: true, zeroline: false, showline: false
+            },
+            yaxis4: {
+                tickprefix: " ", ticksuffix: " km/h", overlaying: 'y3', side: "right", dtick: 10, showgrid: false, showgrid: false, showline: false, fixedrange: true, range: [0, Math.max(...gust.y) * 1.1], zeroline: false, tickangle: -90, anchor: 'free', position: 1.0
+            },
+            yaxis5: {
+                tickprefix: " ", ticksuffix: " hPa", overlaying: 'y3', side: "right", dtick: 2, showgrid: false, showgrid: false, showline: false, fixedrange: true, zeroline: false, tickangle: -90, anchor: 'free', position: 0.0
+            },
+            yaxis6: {
+                overlaying: 'y3', tickvals: [], range: [ymin, ymax], zeroline: false, showline: false, mirror: "ticks", linewidth: 1, showgrid: false, fixedrange: true, tickangle: -90
+            },
+
             shapes: times.filter(x => x.getHours() % 3 == 0).map(x => ({
                 type: 'line', xref: 'x', yref: 'paper', x0: x, y0: 0, x1: x, y1: 1, opacity: x.getHours() == 0 ? 0.3 : (x.getHours() % 6 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
             })).concat(times.filter(x => x.getHours() == 0).map(x => ({
                 type: 'rect', xref: 'x', yref: 'paper', x0: x.getTime() - hours(6), y0: 0, x1: x.getTime() + hours(6), y1: 1, opacity: 0.04, fillcolor: "000", layer: "below"
             }))).concat(range(ymin - (ymin % 1), ymax, 1).map(y => ({
-                type: 'line', xref: 'paper', yref: 'y', x0: 0.03, y0: y, x1: 0.985, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.15 : 0.07), line: { width: 1 }, layer: "below"
+                type: 'line', xref: 'paper', yref: 'y', x0: 0.03, y0: y, x1: 0.985, y1: y, opacity: y % 10 == 0 ? 0.3 : (y % 5 == 0 ? 0.25 : 0.07), line: { width: 1 }, layer: "below"
             }))).concat([{
                 type: 'line', xref: 'x', yref: 'paper', x0: Date.now(), y0: 0, x1: Date.now(), y1: 1, opacity: 1, line: { width: 2 }
             }]),
+
             images: weather.map((w, i) => [w, heights[i]]).filter(x => new Date(x[0].timestamp).getHours() % iconinterval == 0).map(x => ({
                 xref: 'x', yref: 'y', xanchor: "center", yanchor: "bottom", x: new Date(x[0].timestamp), y: x[1] + 0.025 * (ymax - ymin), sizex: 60 * 60 * 1000 * iconinterval * 1.1, sizey: 5, source: icons[x[0].icon], layer: "above"
             })).slice(1, -1),
+
             annotations: [{
-                xref: 'paper', yref: 'paper', xanchor: "left", yanchor: "top", x: 0.03, y: -0.01, text: sources, align: 'right', showarrow: false, textangle: 0,
-                font: {
-                    color: "#505050", size: 18
-                }
+                xref: 'paper', yref: 'paper', xanchor: "left", yanchor: "top", x: 0.03, y: -0.01, text: sources, align: 'right', showarrow: false, textangle: 0, font: { color: "#505050", size: 18 }
             }]
         }
+
         fig = Plotly.newPlot('div1', [wind, gust, pres, dew, sun, prec, temp, tempT], layout, { displayModeBar: false, staticPlot: true });
     }
 
