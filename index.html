@@ -128,7 +128,7 @@
         if (searchParams.has("city")) {
             response = await fetch("https://raw.githubusercontent.com/pensnarik/german-cities/master/germany.json")
             cities = await response.json()
-            city = cities.find(e => e.name === searchParams.get("city"))
+            city = cities.find(e => e.name.toUpperCase() === searchParams.get("city").toUpperCase())
             if (city) {
                 lat = city.coords.lat
                 lon = city.coords.lon
