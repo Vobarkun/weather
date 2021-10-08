@@ -145,6 +145,15 @@
             }
         }
 
+        if (!searchParams.has("city") && !searchParams.has("lon") && !searchParams.has("lat")) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    lat = position.coords.latitude
+                    lon = position.coords.longitude
+                })
+            }
+        }
+
         past = parseInt(searchParams.get("past") ?? 0)
         future = parseInt(searchParams.get("future") ?? 7)
         iconinterval = future + past > 5 ? 3 : 2
