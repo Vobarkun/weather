@@ -187,7 +187,7 @@
 
         sources = ""
         for (s of data.sources) {
-            sources += `${s.observation_type}: ${s.station_name}   `
+            sources += `${s.observation_type.substring(1,2)}: ${s.station_name}   `
         }
         sources = sources.slice(0, -3)
 
