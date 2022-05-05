@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title></title>
+    <meta content="">
+    <style>
+        .crop {
+            width: 120px;
+            height: 160px;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .crop img {
+            transform: scale(2);
+            margin-left: -170px;
+            margin-top: -95px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="gridcontainer">
+    </div>
+    <script>
+        function create(htmlStr) {
+            var frag = document.createDocumentFragment(),
+                temp = document.createElement('div');
+            temp.innerHTML = htmlStr;
+            while (temp.firstChild) {
+                frag.appendChild(temp.firstChild);
+            }
+            return frag;
+        }
+        
+        for (var i = 0; i < 100; i += 3) {
+            var fragment = create(`<div class="crop">
+                <img src=https://silam.fmi.fi/AQ/operational/europe/pollen/000/birch_srf_` + String(i).padStart(3, '0') + `.png>
+            </div>`)
+            document.getElementById("gridcontainer").appendChild(fragment)
+        }
+    </script>
+</body>
+
+</html>
