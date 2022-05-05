@@ -22,6 +22,10 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
         }
+
+        .container > div:nth-child(8n + 5) {
+            margin-bottom: 4em;
+        }
     </style>
 </head>
 
@@ -39,7 +43,13 @@
             return frag;
         }
         
-        for (var i = 0; i < 100; i += 3) {
+        for (var i = 0; i < 24; i += 3) {
+            var fragment = create(`<div class="crop">
+                <img src=https://silam.fmi.fi/AQ/operational/europe/pollen/001/birch_srf_` + String(i).padStart(3, '0') + `.png>
+            </div>`)
+            document.getElementById("gridcontainer").appendChild(fragment)
+        }
+        for (var i = 0; i < 24*3; i += 3) {
             var fragment = create(`<div class="crop">
                 <img src=https://silam.fmi.fi/AQ/operational/europe/pollen/000/birch_srf_` + String(i).padStart(3, '0') + `.png>
             </div>`)
